@@ -1,0 +1,63 @@
+services:
+
+  localstack:
+    image: localstack/localstack-pro:2026.7.4
+    container_name: localstack
+    hostname: localstack
+    restart: unless-stopped
+
+    environment:
+      LOCALSTACK_AUTH_TOKEN: ${LOCALSTACK_AUTH_TOKEN}
+
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+
+      SERVICES: >-
+        s3,
+        dynamodb,
+        sqs,
+        sns,
+        ssm,
+        secretsmanager,
+        kms,
+        lambda,
+        apigateway,
+        cloudwatch,
+        events,
+        iam
+
+      DEBUG: "0"
+
+    ports:
+      - "127.0.0.1:4566:4566"
+
+    volumes:
+      - localstack-data:/var/lib/localstack
+
+      # Required by Lambda and some other services
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    networks:
+      - backend
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:4566/_localstack/health"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  localstack-data:
+    name: localstack-data
+
+networks:
+  backend:

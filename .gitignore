@@ -1,0 +1,14 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+crash.log
+crash.*.log
+
+# Sensitive variables
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Environment
+.env.example
