@@ -12,3 +12,5 @@ crash.*.log
 
 # Environment
 .env.example
+
+.idea/
